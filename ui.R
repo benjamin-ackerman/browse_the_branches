@@ -4,7 +4,7 @@ library(readr)
 library(gt)
 library(gtExtras)
 
-book_df <- read_csv("~/Documents/R_projects/browse_branches/branch_availability.csv")
+book_df <- read_csv("branch_availability.csv")
 
 all_locations <- book_df %>% 
     arrange(available_locations) %>% 
@@ -28,7 +28,10 @@ shinyUI(fluidPage(
         
         # Show a plot of the generated distribution
         mainPanel(
-            gt_output("booktab")
+        
+                gt_output("booktab")
+                
+            
         )
     )
 ))
