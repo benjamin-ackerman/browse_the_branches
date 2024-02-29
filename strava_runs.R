@@ -33,7 +33,8 @@ branches_browsed <- c("Clinton Hill", "Marcy", "Macon", "Eastern Parkway", "Bedf
                       "Windsor Terrace", "Borough Park", "Kensington", "Midwood", "Ryder", "Mapleton",
                       "Brownsville", "Stone Avenue", "East Flatbush", "Rugby", "Flatbush", "Clarendon",
                       "Brower Park", "Crown Heights", "Cortelyou",
-                      "Coney Island", "Brighton Beach", "Sheepshead Bay"#,
+                      "Coney Island", "Brighton Beach", "Sheepshead Bay",
+                      "Williamsburgh", "Leonard", "Greenpoint"#,
                       #"Adams Street", "Center for Brooklyn History", "Brooklyn Heights",
                       #"Central", "Pacific", "Walt Whitman", "Park Slope", "Red Hook", "Carroll Gardens"
                       )
@@ -50,7 +51,7 @@ library_coords <- read_csv("~/Downloads/brooklyn public library- Untitled layer.
   full_join(locations_df, by = c("name" = "branch")) %>% 
   filter(!is.na(lat)) %>% 
   mutate(browsed = ifelse(name %in% paste0(branches_browsed, " Library") 
-                          #| name == "Center for Brooklyn History"
+                          ##| name == "Center for Brooklyn History"
                           , T, F)) %>% 
   filter(browsed)
 
@@ -85,7 +86,8 @@ activities <- httr::config(
 # library_coords %>% 
 #   write_csv(., "library_coords.csv")
 
-cols <- c("#12b259", "#3c5daa", "#fff45f", "#e00079", "#f26648", "#00b3d8")
+# cols <- c("#12b259", "#3c5daa", "#fff45f", "#e00079", "#f26648", "#00b3d8")
+cols <- "#3c5daa"
 icons <- map(library_coords$sticker, ~makeIcon(iconUrl = .x, iconWidth = 20, iconHeight = 20)) %>% 
   set_names(library_coords$name) %>% 
   structure(., class = "leaflet_icon_set")
@@ -97,11 +99,11 @@ p <- activities %>%
   st_sf(crs = "EPSG:4326") %>%  
   leaflet() %>%  
   addTiles() %>%  
-  addPolylines(color = cols, opacity = 1, weight = 4) %>% 
+  addPolylines(color = cols, opacity = 0.8, weight = 4) %>% 
   addProviderTiles("Esri.WorldGrayCanvas") %>% 
   addMarkers(lat = library_coords$lat, lng = library_coords$lon,
              icon = icons[library_coords$name])
                #paste0("<img src = ", library_coords$sticker, ">"))
 
 
-mapshot(p, file = "strava_runs.png", vwidth = 600, vheight = 600, zoom = 5)
+mapshot(p, file = "strava_runs.png", vwidth = 650, vheight = 650, zoom = 5)
