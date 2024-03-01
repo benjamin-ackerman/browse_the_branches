@@ -34,8 +34,9 @@ branches_browsed <- c("Clinton Hill", "Marcy", "Macon", "Eastern Parkway", "Bedf
                       "Brownsville", "Stone Avenue", "East Flatbush", "Rugby", "Flatbush", "Clarendon",
                       "Brower Park", "Crown Heights", "Cortelyou",
                       "Coney Island", "Brighton Beach", "Sheepshead Bay",
-                      "Williamsburgh", "Leonard", "Greenpoint"#,
-                      #"Adams Street", "Center for Brooklyn History", "Brooklyn Heights",
+                      "Williamsburgh", "Leonard", "Greenpoint",
+                      "Cypress Hills", "New Lots", "Spring Creek", "Jamaica Bay", "Canarsie"
+                      #"Adams Street", "Center for Brooklyn History", "Brooklyn Heights", "Bookmobile",
                       #"Central", "Pacific", "Walt Whitman", "Park Slope", "Red Hook", "Carroll Gardens"
                       )
 
@@ -51,7 +52,7 @@ library_coords <- read_csv("~/Downloads/brooklyn public library- Untitled layer.
   full_join(locations_df, by = c("name" = "branch")) %>% 
   filter(!is.na(lat)) %>% 
   mutate(browsed = ifelse(name %in% paste0(branches_browsed, " Library") 
-                          ##| name == "Center for Brooklyn History"
+                          ##| name %in% c("Center for Brooklyn History", "Bookmobile")
                           , T, F)) %>% 
   filter(browsed)
 
@@ -107,3 +108,4 @@ p <- activities %>%
 
 
 mapshot(p, file = "strava_runs.png", vwidth = 650, vheight = 650, zoom = 5)
+
