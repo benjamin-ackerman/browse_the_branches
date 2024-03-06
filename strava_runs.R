@@ -35,7 +35,9 @@ branches_browsed <- c("Clinton Hill", "Marcy", "Macon", "Eastern Parkway", "Bedf
                       "Brower Park", "Crown Heights", "Cortelyou",
                       "Coney Island", "Brighton Beach", "Sheepshead Bay",
                       "Williamsburgh", "Leonard", "Greenpoint",
-                      "Cypress Hills", "New Lots", "Spring Creek", "Jamaica Bay", "Canarsie"
+                      "Cypress Hills", "New Lots", "Spring Creek", "Jamaica Bay", "Canarsie",
+                      "Paerdegat", "Flatlands", "Mill Basin",
+                      "Ulmer Park", "Gravesend", "Kings Highway", "Homecrest"
                       #"Adams Street", "Center for Brooklyn History", "Brooklyn Heights", "Bookmobile",
                       #"Central", "Pacific", "Walt Whitman", "Park Slope", "Red Hook", "Carroll Gardens"
                       )
@@ -89,7 +91,7 @@ activities <- httr::config(
 
 # cols <- c("#12b259", "#3c5daa", "#fff45f", "#e00079", "#f26648", "#00b3d8")
 cols <- "#3c5daa"
-icons <- map(library_coords$sticker, ~makeIcon(iconUrl = .x, iconWidth = 20, iconHeight = 20)) %>% 
+icons <- map(library_coords$sticker, ~makeIcon(iconUrl = .x, iconWidth = 15, iconHeight = 15)) %>% 
   set_names(library_coords$name) %>% 
   structure(., class = "leaflet_icon_set")
 
