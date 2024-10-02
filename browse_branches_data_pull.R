@@ -30,7 +30,7 @@ locations_df <- tibble(
 name_cleaner <- c("YA", "Lrg", "Fic", "Biog","AFR", "Shrt", "Literacy", "Non-Fic", "Sci-Fic", "Audiobk","Audiobook", "Sci","- Lit" ," - " , "1st", "2nd", "3rd", "Mystery")
 
 # Load goodreads data ----
-books <- read_csv("goodreads_library_export.csv")
+books <- read_csv("~/Downloads/goodreads_library_export.csv")
 
 # Clean book data, find locations at BPL where book is available ----
 available_books <- books %>% 

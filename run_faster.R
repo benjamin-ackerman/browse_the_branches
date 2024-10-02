@@ -4,6 +4,7 @@ library(readr)
 library(stringr)
 library(httr)
 library(lubridate)
+library(purrr)
 
 source("utils.R")
 
@@ -19,7 +20,7 @@ library_locations <- read_html(locations_link) %>%
 name_cleaner <- c("YA", "Lrg", "Fic", "Biog","AFR", "Shrt", "Literacy", "Non-Fic", "Sci-Fic", "Audiobk","Audiobook", "Sci","- Lit" ," - " , "1st", "2nd", "3rd", "Mystery")
 
 # Load goodreads data ----
-books <- read_csv("goodreads_library_export.csv")
+books <- read_csv("~/Downloads/goodreads_library_export.csv")
 
 # Clean book data, find locations at BPL where book is available ----
 available_books <- books %>% 
@@ -55,13 +56,31 @@ if(!"bpl_ids.Rds" %in% list.files()){
   bpl_id <- readRDS("bpl_ids.Rds")
 }
 
+bpl_ids <- tibble(
+  Title = names(bpl_id),
+  bpl_id = bpl_id
+) %>% 
+  tidyr::unnest(bpl_id) %>% 
+  mutate(book_link = paste0("https://www.bklynlibrary.org", bpl_id),
+         book_link = ifelse(is.na(bpl_id), NA, book_link))
+
 locations <- bpl_id %>% 
   map(~paste0("https://www.bklynlibrary.org", .x) %>% 
         GetAvailableLocations(., name_cleaner))
 
+locations_table <- tibble(
+  Title = names(locations),
+  available_locations = locations
+) %>% 
+  tidyr::unnest(available_locations) %>% 
+  tidyr::unnest(available_locations) %>% 
+  distinct()
 
 # Unnest and save data
 available_books %>% 
-  dplyr::select(Title, Author, `Date Added`, `Average Rating`, available_locations) %>% 
-  tidyr::unnest(available_locations) %>% 
+  group_by(Title) %>% 
+  filter(`Date Added` == min(`Date Added`)) %>% 
+  ungroup() %>% 
+  inner_join(bpl_ids, by = "Title") %>% 
+  inner_join(locations_table, by = "Title") %>% dplyr::select(Title, Author, book_link, `Date Added`, `Average Rating`, available_locations) %>% 
   write_csv(., file = "branch_availability.csv")
