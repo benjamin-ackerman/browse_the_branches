@@ -5,6 +5,7 @@ library(sf)
 library(stringr)
 library(httr)
 library(rvest)
+library(mapview)
 
 locations_link <- "https://www.bklynlibrary.org/browse-the-branches/about"
 library_locations <- read_html(locations_link) %>% 
@@ -37,7 +38,9 @@ branches_browsed <- c("Clinton Hill", "Marcy", "Macon", "Eastern Parkway", "Bedf
                       "Williamsburgh", "Leonard", "Greenpoint",
                       "Cypress Hills", "New Lots", "Spring Creek", "Jamaica Bay", "Canarsie",
                       "Paerdegat", "Flatlands", "Mill Basin",
-                      "Ulmer Park", "Gravesend", "Kings Highway", "Homecrest"
+                      "Gerritsen Beach", "Kings Bay",
+                      "Ulmer Park", "Gravesend", "Kings Highway", "Homecrest",
+                      "Arlington", "Washington Irving", "Saratoga", "Dekalb", "Bushwick"
                       #"Adams Street", "Center for Brooklyn History", "Brooklyn Heights", "Bookmobile",
                       #"Central", "Pacific", "Walt Whitman", "Park Slope", "Red Hook", "Carroll Gardens"
                       )
@@ -52,11 +55,11 @@ library_coords <- read_csv("~/Downloads/brooklyn public library- Untitled layer.
          name = str_replace(name, " & Learning Center", ""),
          name = ifelse(name == "Brooklyn Historical Society", "Center for Brooklyn History", name)) %>% 
   full_join(locations_df, by = c("name" = "branch")) %>% 
-  filter(!is.na(lat)) %>% 
-  mutate(browsed = ifelse(name %in% paste0(branches_browsed, " Library") 
-                          ##| name %in% c("Center for Brooklyn History", "Bookmobile")
-                          , T, F)) %>% 
-  filter(browsed)
+  filter(!is.na(lat)) #%>% 
+  # mutate(browsed = ifelse(name %in% paste0(branches_browsed, " Library")
+  ##| name %in% c("Center for Brooklyn History", "Bookmobile")
+  # , T, F))# %>%
+  # filter(browsed)
 
 gp2sf <- function(gp) {
   gp %>%  
@@ -109,5 +112,6 @@ p <- activities %>%
                #paste0("<img src = ", library_coords$sticker, ">"))
 
 
+mapshot(p, file = "strava_runs_mobile.png", vwidth = 500, vheight = 16/9*500, zoom = 5)
 mapshot(p, file = "strava_runs.png", vwidth = 650, vheight = 650, zoom = 5)
 
